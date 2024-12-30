@@ -24,7 +24,7 @@
 
 (defn main
   "Day 2 of Advent of Code 2024: Red-Nosed Reports
-       lein run day1 <input>
+       lein run day2 <input>
    where <input> is a filename in resources/"
   [[filename]]
   (let [reports (util/read-number-grid filename)]
