@@ -10,14 +10,14 @@
          (every? #(and (>= % 1) (<= % 3)) distances)))) ; any two differ by 1..3
 
 (defn dampened
-  "Generate sub-sequences the first level removed, then second, and so on"
+  "Generate sub-sequences with the 1st level removed, then 2nd, and so on"
   [levels]
   (let [len (count levels)]
-  (map #(concat (take % levels)
-                (take-last (- len (inc %)) levels))
-       (range len))))
+    (map #(concat (take % levels)
+                  (take-last (- len (inc %)) levels))
+         (range len))))
 
-(defn safe-dampened? 
+(defn safe-dampened?
   "Test whether a report is safe, but allow for one bad level"
   [levels]
   (some safe? (dampened levels)))
