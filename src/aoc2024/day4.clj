@@ -28,6 +28,7 @@
        ; remove any x-ray pairs that have elements out of bounds
        (filter (fn [pairs] (every? #(util/in-bounds? grid %)
                                    (partition 2 2 (flatten pairs)))))
+       ; the inner map looks up the set of x-ray coords in the grid
        (map #(map (fn [coords] (util/grid-values grid coords)) %))
        (filter (fn [pairs] (every? #(or (= '(\M \A \S) %)
                                         (= '(\S \A \M) %))
