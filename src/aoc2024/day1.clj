@@ -1,6 +1,5 @@
 (ns aoc2024.day1
-  (:require [aoc2024.util :as util]
-            [clojure.string :as string]))
+  (:require [aoc2024.util :as util]))
 
 (defn ziplike
   "Given a sequence of lists, return a sequence of lists made of all first
@@ -15,7 +14,7 @@
   (->> (ziplike pairs) ; unzip the pairs
        (map sort)      ; sort resulting sub-lists
        (ziplike)       ; zip 'em up again
-       (map (fn [[a b]] (abs (- a b))))
+       (util/distances)
        (reduce +)))
 
 (defn similarity
@@ -27,17 +26,12 @@
         weighted (map #(* % (get freqs % 0)) a)]
     (reduce + weighted)))
 
-(defn parse-pairs
-  "Parse the input into a seq of pairs"
-  [input]
-  (map (fn [line](map #(Integer/parseInt %) (string/split (string/trim line) #"\s+"))) input))
-
 (defn main
   "Day 1 of Advent of Code 2024: Historian Hysteria
        lein run day1 <input>
    where <input> is a filename in resources/"
   [[filename]]
-  (let [pairs (parse-pairs (util/read-lines filename))
+  (let [pairs (util/read-number-grid filename)
         dist (distance pairs)
         sim (similarity pairs)]
    (println "total distance:" dist)
