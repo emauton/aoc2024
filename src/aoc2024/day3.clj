@@ -13,21 +13,26 @@
             remainder (rest (drop-while (complement on-pred) (nthrest input (count filtered))))]
         (recur remainder (concat acc filtered))))))
 
+(defn multiply
+  "Given a list of [mul, arg1, arg2] matches returned by re-seq, return a
+   sequence of mul results"
+  [instructions]
+  (map (fn [[_ a b]] (* (Integer/parseInt a) (Integer/parseInt b))) instructions))
+
 (defn mul-results
   "Return all mul(x,y) results in the input"
   [input]
   (let [pattern (re-pattern #"mul\((\d+),(\d+)\)")]
-    (map (fn [[_ a b]] (* (Integer/parseInt a) (Integer/parseInt b)))
-         (re-seq pattern input))))
+    (multiply (re-seq pattern input))))
 
 (defn mul-results-enabled
   "Return all mul(x,y) results in the input where enabled"
   [input]
   (let [pattern (re-pattern #"mul\((\d+),(\d+)\)|don't\(\)|do\(\)")
-        muls (filter-onoff #(= "don't()" (first %))
-                           #(= "do()" (first %))
+        muls (filter-onoff (fn [[op & _]] (= "don't()" op))
+                           (fn [[op & _]] (= "do()" op))
                            (re-seq pattern input))]
-    (map (fn [[_ a b]] (* (Integer/parseInt a) (Integer/parseInt b))) muls)))
+    (multiply muls)))
 
 (defn main
   "Day 3 of Advent of Code 2024: Mull It Over
